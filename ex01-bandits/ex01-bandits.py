@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+import time
 
 
 class GaussianBandit:
@@ -30,24 +31,49 @@ def greedy(bandit, timesteps):
     # TODO: init variables (rewards, n_plays, Q) by playing each arm once
     for i in possible_arms:
         rewards[i] = bandit.play_arm(i)     # play each arm
-        n_plays[i] = bandit.total_played    
+        n_plays[i] += 1
 
-    ind = np.argmax(rewards)  # indices of max value
-    Q[ind] = np.max(rewards)
+    Q[np.argmax(rewards)] += np.max(rewards)
 
     # Main loop
     while bandit.total_played < timesteps:
-        # This example shows how to play a random arm:
-        a = random.choice(possible_arms)
-        reward_for_a = bandit.play_arm(a)
         # TODO: instead do greedy action selection
-        # TODO: update the variables (rewards, n_plays, Q) for the selected arm
+        # TODO: update the variables (rewards, n_plays, Q)for the selected arm
+        a = np.argmax(Q)                    # greedy select the best arm
+        rewards[a] = bandit.play_arm(a)     # play this arm
+        n_plays[a] += 1
+        prev_reward = Q[np.argmax(rewards)]
+        Q[np.argmax(rewards)] = prev_reward + ((np.max(rewards) - prev_reward) / n_plays[a])  # Book, page 54 - Meaning?
+
 
 
 def epsilon_greedy(bandit, timesteps):
     # TODO: epsilon greedy action selection (you can copy your code for greedy as a starting point)
+    rewards = np.zeros(bandit.n_arms)
+    n_plays = np.zeros(bandit.n_arms)
+    Q = np.zeros(bandit.n_arms)
+    possible_arms = range(bandit.n_arms)
+    epsilon = 0.01
+
+    for i in possible_arms:
+        rewards[i] = bandit.play_arm(i)
+        n_plays[i] += 1
+    Q[np.argmax(rewards)] += np.max(rewards)
+
+    # Main loop
     while bandit.total_played < timesteps:
-        reward_for_a = bandit.play_arm(0)  # Just play arm 0 as placeholder
+        r = random.random()  # number between 0.0 and 1.0
+        # Prob == r ? Do random action
+        if r <= epsilon:
+            a = random.choice(possible_arms)
+            rewards[a] = bandit.play_arm(a)
+        # do greedy action
+        else:
+            a = np.argmax(Q)
+            rewards[a] = bandit.play_arm(a)
+        n_plays[a] += 1
+        prev_reward = Q[np.argmax(rewards)]
+        Q[np.argmax(rewards)] = prev_reward + ((np.max(rewards) - prev_reward) / n_plays[a])  # Book, page 54 - Meaning?
 
 
 def main():
@@ -82,4 +108,6 @@ def main():
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     main()
+    print("--- %s seconds ---" % (time.time() - start_time))
