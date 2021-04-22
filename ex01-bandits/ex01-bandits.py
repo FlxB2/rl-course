@@ -28,6 +28,12 @@ def greedy(bandit, timesteps):
     possible_arms = range(bandit.n_arms)
 
     # TODO: init variables (rewards, n_plays, Q) by playing each arm once
+    for i in possible_arms:
+        rewards[i] = bandit.play_arm(i)     # play each arm
+        n_plays[i] = bandit.total_played    
+
+    ind = np.argmax(rewards)  # indices of max value
+    Q[ind] = np.max(rewards)
 
     # Main loop
     while bandit.total_played < timesteps:
