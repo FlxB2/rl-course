@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Find documents
-        run: FILE_NAMES=$(find . -type f -name '*.tex')
+        run: echo "FILE_NAMES=$(find . -type f -name '*.tex')" >> $GITHUB_ENV
       - name: Show documents to compile
         run: echo $FILE_NAMES
       - name: Compile documents
