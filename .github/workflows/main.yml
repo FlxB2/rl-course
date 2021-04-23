@@ -1,0 +1,27 @@
+name: Build LaTeX files
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Compile documents
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: ex01-bandits/main.tex
+      - name: Upload pdfs
+        uses: actions/upload-artifact@v2
+        with:
+          name: main
+          path: main.pdf
