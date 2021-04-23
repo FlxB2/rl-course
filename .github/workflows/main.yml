@@ -17,13 +17,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Find documents
-        run: echo "FILE_NAMES=$(find . -type f -name '*.tex')" >> $GITHUB_ENV
+        run: |
+            FILE_NAMES=$(find . -type f -name '*.tex')
+            FILE_NAMES="${FILE_NAMES//'%'/'%25'}"
+            FILE_NAMES="${FILE_NAMES//$'\n'/'%0A'}"
+            FILE_NAMES="${FILE_NAMES//$'\r'/'%0D'}"
+            echo "::set-output name=content::$FILE_NAMES"
+        id: docs
       - name: Show documents to compile
-        run: echo $FILE_NAMES
+        run: | 
+          echo "documents to compile: ${{ steps.docs.outputs.content }}"
       - name: Compile documents
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: ${{ env.FILE_NAMES }}
+          root_file: ${{steps.docs.outputs.content}}
       - name: Upload pdfs
         uses: actions/upload-artifact@v2
         with:
