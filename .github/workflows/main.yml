@@ -23,7 +23,7 @@ jobs:
       - name: Compile documents
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: "$FILE_NAMES"
+          root_file: ${{ env.FILE_NAMES }}
       - name: Upload pdfs
         uses: actions/upload-artifact@v2
         with:
