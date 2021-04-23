@@ -16,12 +16,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Find documents
+        run: FILE_NAMES=$(find . -type f -name '*.tex')
+      - name: Show documents to compile
+        run: echo $FILE_NAMES
       - name: Compile documents
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: ex01-bandits/main.tex
+          root_file: "$FILE_NAMES"
       - name: Upload pdfs
         uses: actions/upload-artifact@v2
         with:
           name: main
-          path: main.pdf
+          path: ./*.pdf
