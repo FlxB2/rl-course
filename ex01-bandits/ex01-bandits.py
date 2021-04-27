@@ -30,10 +30,9 @@ def greedy(bandit, timesteps):
 
     # TODO: init variables (rewards, n_plays, Q) by playing each arm once
     for i in possible_arms:
-        rewards[i] = bandit.play_arm(i)     # play each arm
+        rewards[i] += bandit.play_arm(i)     # play each arm
         n_plays[i] += 1
-
-    Q[np.argmax(rewards)] += np.max(rewards)
+        Q[i] = rewards[i] / n_plays[i]
 
     # Main loop
     while bandit.total_played < timesteps:
@@ -42,8 +41,7 @@ def greedy(bandit, timesteps):
         a = np.argmax(Q)                    # greedy select the best arm
         rewards[a] = bandit.play_arm(a)     # play this arm
         n_plays[a] += 1
-        prev_reward = Q[np.argmax(rewards)]
-        Q[np.argmax(rewards)] = prev_reward + ((np.max(rewards) - prev_reward) / n_plays[a])  # Book, page 54 - Meaning?
+        Q[a] = rewards[a] / n_plays[a]
 
 
 
@@ -53,12 +51,12 @@ def epsilon_greedy(bandit, timesteps):
     n_plays = np.zeros(bandit.n_arms)
     Q = np.zeros(bandit.n_arms)
     possible_arms = range(bandit.n_arms)
-    epsilon = 0.01
+    epsilon = 0.1
 
     for i in possible_arms:
-        rewards[i] = bandit.play_arm(i)
+        rewards[i] += bandit.play_arm(i)
         n_plays[i] += 1
-    Q[np.argmax(rewards)] += np.max(rewards)
+        Q[i] = rewards[i] / n_plays[i]
 
     # Main loop
     while bandit.total_played < timesteps:
@@ -66,18 +64,19 @@ def epsilon_greedy(bandit, timesteps):
         # Prob == r ? Do random action
         if r <= epsilon:
             a = random.choice(possible_arms)
-            rewards[a] = bandit.play_arm(a)
         # do greedy action
         else:
             a = np.argmax(Q)
-            rewards[a] = bandit.play_arm(a)
+        rewards[a] += bandit.play_arm(a)
         n_plays[a] += 1
-        prev_reward = Q[np.argmax(rewards)]
-        Q[np.argmax(rewards)] = prev_reward + ((np.max(rewards) - prev_reward) / n_plays[a])  # Book, page 54 - Meaning?
+        Q[a] = rewards[a] / n_plays[a]
+        # algo from page 27, but performs worse - Why?
+        # prev_reward = Q[np.argmax(rewards)]
+        # Q[np.argmax(rewards)] = prev_reward + ((np.max(rewards) - prev_reward) / n_plays[a])
 
 
 def main():
-    n_episodes = 500  # TODO: set to 10000 to decrease noise in plot
+    n_episodes = 10000  # TODO: set to 10000 to decrease noise in plot
     n_timesteps = 1000
     rewards_greedy = np.zeros(n_timesteps)
     rewards_egreedy = np.zeros(n_timesteps)
