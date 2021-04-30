@@ -64,7 +64,7 @@
 	
     \section*{Task 1 - Multi-armed Bandits}
     \begin{itemize}
-    \item[a)] $\epsilon$-greedy action selection selects the greedy action with probability $p=1-\epsilon$. Therefore, $p=0.5$
+    \item[a)] $\epsilon$-greedy action selection selects the greedy action with probability $p=1-\epsilon + \frac{\epsilon}{k}$. Therefore, $p=0.75$
     \item[b)]
     	\begin{itemize}
     		\item[1)] Step 2: Because $\argmax_a Q_2(a) = 1 = A_1$ and action 2 is selected \\
