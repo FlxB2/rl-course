@@ -1,0 +1,87 @@
+\documentclass[a4paper]{article}
+%\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{geometry}
+\geometry{ left=2cm, right=2cm, top=2cm, bottom=3cm, bindingoffset=5mm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{amstext}
+\usepackage{array}
+\usepackage{amsmath}
+\newcolumntype{L}{>{$}l<{$}}
+\usepackage{tabularx, ragged2e}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{lastpage}
+\usepackage{todonotes}
+\usepackage{titlesec}
+\titleformat*{\section}{\large\bfseries}
+\usepackage{listings}
+\usepackage{color}
+
+\usepackage{tikz}
+%\newcommand{\tikzmark}[2]{\tikz[overlay, remember picture] \node[inner sep=0pt, outer sep=0pt, anchor=base] (#1) {#2};}
+\usetikzlibrary{tikzmark}
+
+
+\definecolor{mygreen}{rgb}{0.18, 0.545, 0.341}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{myblue}{rgb}{0.53,0.61,0.85}
+
+\lstset{
+ keywordstyle=\color{mygreen},
+ commentstyle=\color{mygray},
+ numbers=left,
+ numbersep=5pt, 
+ numberstyle=\scriptsize\color{mygray}
+ }
+
+\date{}
+\author{}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{Felix Burk\\ Pascal Huszár}
+\fancyhead[L]{Reinforcment Learning \\ Summer Term 2021 }
+\fancyfoot[R]{page \thepage \text{ }/ \pageref*{LastPage}}
+%\fancyfoot[LE]{Seite \thepage \text{ }von \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.5pt}
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+\title{\textbf{Exercise 02}}
+
+\begin{document}
+	\maketitle 
+	\thispagestyle{fancy}
+	
+    \section*{Task 1 - Formulating Problems}
+    Describe the set of states, the set of actions and the reward signal you would use for the problems.\\
+    Are they discrete, continues, how many dimensions, etc?
+    \newline
+    \newline
+    \begin{tabularx}{\textwidth} { 
+    		 >{\centering}X 
+    		| >{\raggedright}X 
+    		| >{\raggedright\arraybackslash}X
+    		| >{\raggedright\arraybackslash}X 
+    		| >{\raggedright\arraybackslash}X}
+    	\hline
+    	 & \vspace{2pt} a) The game of chess & \vspace{2pt} b) A pick and place robot & \vspace{2pt} c) A drone that should stabilize in the air & \vspace{2pt} d) Dart \\
+    	\hline
+    	\vspace{2pt} Set of \textbf{states}   & \vspace{2pt} \textbf{\textit{Discrete:}} \\ The valid possibilities of the board's configuration (e.g. 16 chess pieces for each player, predefined set of chess pieces, predefined position for the chess pieces, etc.). In classic chess two dimensions but also three are possible.   & \vspace{2pt} \textbf{\textit{Continous:}} Depending on the architecture of the robot, the 3d position of the robot itself but also the tools for picking and placing objects (arms), objects position and the desired target position. Different numbers of dimensions possible  & \vspace{2pt} \textbf{\textit{Continous:}} Position on the x-axis and y-axis. Two dimensions (x, y)    & \vspace{2pt} \textbf{\textit{Continous:}} A state consists of player's hand movement, darts position and darts position on the dartboard. Three dimensions (x, y, z)  \\
+    	\hline
+		\vspace{2pt} Set of \textbf{actions}  & \vspace{2pt} The valid movements of the corresponding chess  piece in a specific state  & \vspace{2pt} Move the different components (joints) of the robot, grab an object, place an object & \vspace{2pt} Rotate the rotors faster or slower & \vspace{2pt} Throw each of the three darts towards the dartboard, pick the three darts of the board   \\
+    	\hline
+    	\vspace{2pt} \textbf{Reward} signal  & \vspace{2pt} For each move of a chess piece and the board state a reward is calculated based on the moved chess piece and the new board state. The agent get a negative/worse reward if he loses on chess piece or the match & \vspace{2pt} The pick and place procedure with the lowest amount of actions and time needed has the highest reward & \vspace{2pt} For each second a drone rotor isn't horizontal place the agent gets a negative reward & \vspace{2pt} The agent's reward corresponds to the score of area where a dart landed. Discount factor for immediate reward in order to motivate the agent aiming for high score areas \\
+    	\hline
+    \end{tabularx}
+    
+\end{document}
