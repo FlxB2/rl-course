@@ -1,5 +1,6 @@
 import gym
 import numpy as np
+import itertools
 
 # Init environment
 # Lets use a smaller 3x3 custom map for faster computations
@@ -63,6 +64,30 @@ def bruteforce_policies():
     optimalvalue = np.zeros(n_states)
     
     # TODO: implement code that tries all possible policies, calculate the values using def value_policy. Find the optimal values and the optimal policies to answer the exercise questions.
+
+    # define what actions can be done in each state
+    possible_actions = []
+    for state in range(n_states):
+        if state in terms:
+            possible_actions.append([0])
+        else:
+            possible_actions.append([0, 1, 2, 3])
+
+    # get all possible permutations of all possible actions
+    all_policies = list()
+    for policy in itertools.product(*possible_actions):
+        all_policies.append(policy)
+
+    # calculate values
+    value_functions = list()
+    for p in all_policies:
+        value_functions.append(value_policy(p))
+    optimalvalue = np.amax(value_functions, axis=0)
+
+    # find policys with optimalvalue
+    for (i, arr) in enumerate(value_functions):
+        if np.array_equal(arr, optimalvalue):
+            optimalpolicies.append(all_policies[i])
 
     print("Optimal value function:")
     print(optimalvalue)
