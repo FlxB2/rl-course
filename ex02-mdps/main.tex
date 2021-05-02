@@ -74,7 +74,7 @@
     		| >{\raggedright\arraybackslash}X 
     		| >{\raggedright\arraybackslash}X}
     	\hline
-    	 & \vspace{2pt} a) The game of chess & \vspace{2pt} b) A pick and place robot & \vspace{2pt} c) A drone that should stabilize in the air & \vspace{2pt} d) Dart \\
+    	 & \vspace{2pt} a) The game of chess & \vspace{2pt} b) A pick and place robot & \vspace{2pt} c) A drone that should stabilize in the air & \vspace{2pt} d) A robot masters Dart \\
     	\hline
     	\vspace{2pt} Set of \textbf{states}   & \vspace{2pt} \textbf{\textit{Discrete:}} \\ The valid possibilities of the board's configuration (e.g. 16 chess pieces for each player, predefined set of chess pieces, predefined position for the chess pieces, etc.). In classic chess two dimensions but also three are possible.   & \vspace{2pt} \textbf{\textit{Continous:}} Depending on the architecture of the robot, the 3d position of the robot itself but also the tools for picking and placing objects (arms), objects position and the desired target position. Different numbers of dimensions possible  & \vspace{2pt} \textbf{\textit{Continous:}} Position on the x-axis and y-axis. Two dimensions (x, y)    & \vspace{2pt} \textbf{\textit{Continous:}} A state consists of player's hand movement, darts position and darts position on the dartboard. Three dimensions (x, y, z)  \\
     	\hline
@@ -83,5 +83,18 @@
     	\vspace{2pt} \textbf{Reward} signal  & \vspace{2pt} For each move of a chess piece and the board state a reward is calculated based on the moved chess piece and the new board state. The agent get a negative/worse reward if he loses on chess piece or the match & \vspace{2pt} The pick and place procedure with the lowest amount of actions and time needed has the highest reward & \vspace{2pt} For each second a drone rotor isn't horizontal place the agent gets a negative reward & \vspace{2pt} The agent's reward corresponds to the score of area where a dart landed. Discount factor for immediate reward in order to motivate the agent aiming for high score areas \\
     	\hline
     \end{tabularx}
-    
+	\newpage
+	\section*{Task 2 - Value Functions}
+	\begin{itemize}
+		\item[a)]
+		\item[b)]
+		\item[c)]
+	\end{itemize}
+	\section*{Task 3 - Bruteforce the Policy Space}
+		\begin{itemize}
+		\item[a)]
+		\item[b)]
+		\item[c)]
+		\item[d)]
+	\end{itemize}
 \end{document}
