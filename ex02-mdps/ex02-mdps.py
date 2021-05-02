@@ -50,7 +50,9 @@ def value_policy(policy):
     P = trans_matrix_for_policy(policy)
     # TODO: calculate and return v
     # (P, r and gamma already given)
-    return None
+    eye = np.eye(n_states)
+    v = np.matmul(np.linalg.inv(eye - gamma * P), r)
+    return v
 
 
 def bruteforce_policies():
@@ -62,12 +64,12 @@ def bruteforce_policies():
     
     # TODO: implement code that tries all possible policies, calculate the values using def value_policy. Find the optimal values and the optimal policies to answer the exercise questions.
 
-    print ("Optimal value function:")
+    print("Optimal value function:")
     print(optimalvalue)
-    print ("number optimal policies:")
-    print (len(optimalpolicies))
-    print ("optimal policies:")
-    print (np.array(optimalpolicies))
+    print("number optimal policies:")
+    print(len(optimalpolicies))
+    print("optimal policies:")
+    print(np.array(optimalpolicies))
     return optimalpolicies
 
 
@@ -84,16 +86,15 @@ def main():
 
     # Value functions:
     print("Value function for policy_left (always going left):")
-    print (value_policy(policy_left))
+    print(value_policy(policy_left))
     print("Value function for policy_right (always going right):")
-    print (value_policy(policy_right))
-
+    print(value_policy(policy_right))
     optimalpolicies = bruteforce_policies()
 
 
     # This code can be used to "rollout" a policy in the environment:
-    """
-    print ("rollout policy:")
+    """    
+    print("rollout policy:")
     maxiter = 100
     state = env.reset()
     for i in range(maxiter):
@@ -103,6 +104,7 @@ def main():
         if done:
             print ("Finished episode")
             break"""
+
 
 
 if __name__ == "__main__":
