@@ -59,9 +59,6 @@ def value_policy(policy):
 def bruteforce_policies():
     terms = terminals()
     optimalpolicies = []
-
-    policy = np.zeros(n_states, dtype=np.int)  # in the discrete case a policy is just an array with action = policy[state]
-    optimalvalue = np.zeros(n_states)
     
     # TODO: implement code that tries all possible policies, calculate the values using def value_policy. Find the optimal values and the optimal policies to answer the exercise questions.
 
