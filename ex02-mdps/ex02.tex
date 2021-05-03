@@ -40,6 +40,12 @@
  numberstyle=\scriptsize\color{mygray}
  }
 
+\usepackage{amsmath,amssymb}
+
+\DeclareRobustCommand{\bbone}{\text{\usefont{U}{bbold}{m}{n}1}}
+
+\DeclareMathOperator{\EX}{\mathbb{E}}% expected value
+
 \date{}
 \author{}
 \usepackage{fancyhdr}
@@ -86,9 +92,22 @@
 	\newpage
 	\section*{Task 2 - Value Functions}
 	\begin{itemize}
-		\item[a)]
-		\item[b)]
-		\item[c)]
+		\item[a)] In the bandit setting no state exists which could influence future rewards. 
+				  The reward does not depend on which taken has been earlier regarding k-armed bandits.
+				  Therefore we do not have to consider how the future reward might change depending on the action we choose, because the reward will not change anyway.
+		\item[b)] To show: $_\pi(s) = \sum_{a}^{} \pi(a|s)*q_\pi(s,a)$ \\
+				  We know that: $v_\pi(s) = \EX_\pi [\sum_{i=0}^{\inf}\gamma^iR_{t+i+1}| S_t = s]$ \\
+				  Because $q_\pi = \EX_\pi [\sum_{i=0}^{\inf}\gamma^iR_{t+i+1}| S_t = s, A_t = a]$ and 
+				  $\pi(a|s) = Pr\{A_t=a|S_t=s\}$ \\
+				  We can write: \\ $v_\pi(s) = \sum_{a}^{}Pr\{A_t=a|S_t=s\}*\EX_\pi [\sum_{i=0}^{\inf}\gamma^iR_{t+i+1}| S_t = s, A_t = a] = \EX_\pi [\sum_{i=0}^{\inf}\gamma^iR_{t+i+1}| S_t = s]$
+		\item[c)] $v_\pi(s)=\sum_{a}^{}\pi(a|s)\sum_{s',r}^{}p(s',r|s,a)[r+\gamma*v_\pi(s')]$ \\
+				  $ = \sum_{a}^{}\pi(a|s)\sum_{s'}^{}\sum_{r}^{}p(s',r|s,a)[r+\gamma*v_\pi(s')] $ \\
+				  $ = \sum_{a}^{}\pi(a|s)\sum_{s'}^{}\sum_{r}^{}p(s',r|s,a)*r + p(s',r|s,a)*\gamma*v_\pi(s')$ \\
+				  $ = \sum_{a}^{}\pi(a|s)\sum_{s'}^{}\sum_{r}^{}p(s',r|s,a)*r + p(s',r|s,a)*\gamma*v_\pi(s')$ \\
+				  We know that: $r(s,a,s') = \sum_{r}^{}r*\frac{p(s',r|s,a)}{p(s'|s,a)}$ \\
+				  Therefore: $r(s,a,s') * p(s'|s,a) = \sum_{r}^{} r*p(s'r|s,a)$ \\
+				  $ v_\pi(a) = \sum_{a}^{}\pi(a|s)\sum_{s'}^{}r(s,a,s')*p(s'|s,a)+\sum_{r}\gamma*v_\pi(s')*p(s',r|s,a)$ \\
+				  $ = \sum_{a}^{}\pi(a|s)\sum_{s'}^{}r(s,a,s')*p(s'|s,a)+p(s'|s,a)*\gamma*v_\pi(s')$
 	\end{itemize}
 	\section*{Task 3 - Bruteforce the Policy Space}
 		\begin{itemize}
