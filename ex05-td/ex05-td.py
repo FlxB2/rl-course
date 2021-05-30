@@ -17,7 +17,6 @@ def print_policy(Q, env):
         policy[idx] = moves[np.argmax(Q[s])]
         if env.desc[idx] in ['H', 'G']:
             policy[idx] = u'·'
-    print(env.render())
     print('\n'.join([''.join([u'{:2}'.format(item) for item in row]) 
         for row in policy]))
 
@@ -96,22 +95,26 @@ def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
     
     for _ in range(num_ep):
         state = env.reset()
-        rnd = np.random.random()
         done = False
-        action = None
+        action = _action_policy(state, epsilon, Q)
 
         while not done:
-            if rnd <= epsilon:
-                action = np.random.randint(env.action_space.n)
-            else:
-                action = np.argmax(Q[state, :])
-
             next_state, reward, done, _ = env.step(action)
-            next_action = np.argmax(Q[next_state, :])  # Q: why not next_action = action? sarsa is on-policy, so same policy for a and a' ..
+            next_action = _action_policy(next_state, epsilon, Q)  # because on-policy
+
             Q[state, action] += alpha * (reward + gamma * Q[next_state, next_action] - Q[state, action])
+            
             state = next_state
+            action = next_action
     return Q
 
+def _action_policy(state, eps, Q):
+    rnd = np.random.random()
+    if rnd <= eps:
+        action = np.random.randint(env.action_space.n)
+    else:
+        action = np.argmax(Q[state, :])
+    return action
 
 def qlearning(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
     Q = np.zeros((env.observation_space.n,  env.action_space.n))
