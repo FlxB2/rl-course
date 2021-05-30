@@ -85,6 +85,17 @@ def plot_Q(Q, env):
     plt.xticks([])
     plt.yticks([])
 
+def _action_policy(state, eps, Q):
+    rnd = np.random.random()
+    if rnd <= eps:
+        action = np.random.randint(env.action_space.n)
+    else:
+        action = np.argmax(Q[state, :])
+    return action
+
+def _greedy_action_policy(state, eps, Q):
+    max_value = np.argmax(Q[state, :])
+    return max_value
 
 def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
     # Initalize Q arbitrarily, but make terminal states = 0
@@ -108,17 +119,24 @@ def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
             action = next_action
     return Q
 
-def _action_policy(state, eps, Q):
-    rnd = np.random.random()
-    if rnd <= eps:
-        action = np.random.randint(env.action_space.n)
-    else:
-        action = np.argmax(Q[state, :])
-    return action
-
 def qlearning(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
-    Q = np.zeros((env.observation_space.n,  env.action_space.n))
-    # TODO: implement the qlearning algorithm
+    # Initalize Q arbitrarily, but make terminal states = 0
+    Q = np.random.random((env.observation_space.n,  env.action_space.n))
+    env_t_states = ((env.desc == b'H') | (env.desc == b'G')).flatten()
+    Q[env_t_states, :] = 0
+
+    for _ in range(num_ep):
+        state = env.reset()
+        done = False
+        action = _action_policy(state, epsilon, Q)
+
+        while not done:
+            next_state, reward, done, _ = env.step(action)
+            next_action = _greedy_action_policy(next_state, epsilon, Q)  # off-policy, greedy action
+            Q[state, action] += alpha * (reward + gamma * Q[next_state, next_action] - Q[state, action])
+            
+            state = next_state
+            action = next_action
     return Q
 
 
@@ -133,9 +151,9 @@ plot_Q(Q, env)
 print_policy(Q, env)
 plt.show()
 
-#print("Running qlearning")
-#Q = qlearning(env)
-#plot_V(Q, env)
-#plot_Q(Q, env)
-#print_policy(Q, env)
-#plt.show()
+print("Running qlearning")
+Q = qlearning(env)
+plot_V(Q, env)
+plot_Q(Q, env)
+print_policy(Q, env)
+plt.show()
