@@ -67,12 +67,102 @@
 \begin{document}
 	\maketitle 
 	\thispagestyle{fancy}
-	
     \section*{Task 1 - Random Walk}
-    In the first episode the agent starts in state A and subsequently lands in the terminating state on the right, resulting in a reward of zero. Because the agent reached a terminating state the random walk is over. The estimate for A changed by 0.05.\\
+    In the first episode the agent starts in state A and subsequently lands in the terminating state on the left, resulting in a reward of zero. Because the agent reached a terminating state the random walk is over. \\
 
-    $V(A_1) = V(A_1) + \alpha * [R_{t+1} + \gamma*V(A_{t+1})-V(S_t)]$ \\
+    $V(A_1) = V(A_1) + \alpha * [R_{t+1} + \gamma*V(A_{t+1})-V(A_1)]$ \\
     
-    $V(A_1) = 0.5 + 0.01 * [0 + 0 - 0.5] = 0.45$ 
+    $V(A_1) = 0.5 + 0.01 * [0 + 0 - 0.5] = 0.45$ \\
+    
+    The estimate for A changed by 0.05.\\
+    
+    \section*{Task 2 - Sarsa and Q-learning on the FrozenLake}
+    \subsection*{a)}
+    \begin{center}
+    	\begin{tabular}{ c c c c }
+			↓ & ↑ & ↓ & ↑ \\ 
+			← & ← & → & ← \\
+			↑ & ↓ & ← & ← \\
+			← & ↓ & → & ←   
+    	\end{tabular} \\\vspace{10pt}
+        	Sarsa policy 
+    \end{center}
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.8\linewidth]{state_value_sarsa}
+	\caption{State value -  Sarsa }
+	\label{fig:state_value_sarsa}
+\end{figure}
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.8\linewidth]{action_value_sarsa}
+	\caption{Action value - Sarsa}
+	\label{fig:action_value_sarsa}
+\end{figure}
 
+\newpage
+\subsection*{b)}
+\begin{center}
+	\begin{tabular}{ c c c c }
+		→ & ↑ & ↓ & ↑ \\ 
+		← & ← & → & ← \\
+		↑ & ↓ & ← & ← \\
+		← & → & ↓ & ←  
+	\end{tabular} \\\vspace{10pt}
+	Q-Learning policy
+\end{center}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.8\linewidth]{state_value_qlearning}
+	\caption{State value -  Q-Learning }
+	\label{fig:state_value_qlearning}
+\end{figure}
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.8\linewidth]{action_value_qlearning}
+	\caption{Action value - Q-Learning}
+	\label{fig:action_value_qlearning}
+\end{figure}
+
+\newpage
+\subsection*{c)}
+    \begin{center}
+	\begin{tabular}{ c c c c }
+		↓ & → & ↓ & ↓ \\
+		↓ & ← & ↓ & ← \\
+		→ & ↓ & ← & ← \\
+		← & → & → & ←  
+	\end{tabular} \\\vspace{10pt}
+	Det. Sarsa policy 
+\end{center}
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.8\linewidth]{det_action_value_sarsa}
+	\caption{DET: Action value - Sarsa}
+	\label{fig:action_value_qlearning}
+\end{figure}
+
+\newpage
+\begin{center}
+	\begin{tabular}{ c c c c }
+		→ & → & ↓ & ↑ \\ 
+		↑ & ← & ↓ & ← \\
+		↑ & ↑ & ↓ & ← \\
+		← & ↓ & → & ← 
+	\end{tabular} \\\vspace{10pt}
+	Det. Q-Learning policy 
+\end{center}
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.8\linewidth]{det_action_value_qlearning}
+	\caption{DET: Action value - Q-Learning}
+	\label{fig:action_value_qlearning}
+\end{figure}
+
+\newpage
+\subsection*{d)}
+	For the larger FrozenLake environment, uncomment: \\
+	
+	env=gym.make('FrozenLake-v0', map\_name="8x8")
 \end{document}
