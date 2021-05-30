@@ -17,6 +17,7 @@ def print_policy(Q, env):
         policy[idx] = moves[np.argmax(Q[s])]
         if env.desc[idx] in ['H', 'G']:
             policy[idx] = u'·'
+    print(env.render())
     print('\n'.join([''.join([u'{:2}'.format(item) for item in row]) 
         for row in policy]))
 
@@ -87,17 +88,28 @@ def plot_Q(Q, env):
 
 
 def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
-    Q = np.zeros((env.observation_space.n,  env.action_space.n))
-
-    # TODO: implement the sarsa algorithm
-
-    # This is some starting point performing random walks in the environment:
-    for i in range(num_ep):
-        s = env.reset()
+    # Initalize Q arbitrarily, but make terminal states = 0
+    Q = np.random.random((env.observation_space.n,  env.action_space.n))
+    env_t_states = ((env.desc == b'H') | (env.desc == b'G')).flatten()
+    Q[env_t_states, :] = 0
+    
+    
+    for _ in range(num_ep):
+        state = env.reset()
+        rnd = np.random.random()
         done = False
+        action = None
+
         while not done:
-            a = np.random.randint(env.action_space.n)
-            s_, r, done, _ = env.step(a)
+            if rnd <= epsilon:
+                action = np.random.randint(env.action_space.n)
+            else:
+                action = np.argmax(Q[state, :])
+
+            next_state, reward, done, _ = env.step(action)
+            next_action = np.argmax(Q[next_state, :])  # Q: why not next_action = action? sarsa is on-policy, so same policy for a and a' ..
+            Q[state, action] += alpha * (reward + gamma * Q[next_state, next_action] - Q[state, action])
+            state = next_state
     return Q
 
 
@@ -118,9 +130,9 @@ plot_Q(Q, env)
 print_policy(Q, env)
 plt.show()
 
-print("Running qlearning")
-Q = qlearning(env)
-plot_V(Q, env)
-plot_Q(Q, env)
-print_policy(Q, env)
-plt.show()
+#print("Running qlearning")
+#Q = qlearning(env)
+#plot_V(Q, env)
+#plot_Q(Q, env)
+#print_policy(Q, env)
+#plt.show()
