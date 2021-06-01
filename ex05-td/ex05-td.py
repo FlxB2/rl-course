@@ -85,7 +85,7 @@ def plot_Q(Q, env):
     plt.xticks([])
     plt.yticks([])
 
-def _action_policy(state, eps, Q):
+def _epsilon_greedy_action_policy(state, eps, Q):
     rnd = np.random.random()
     if rnd <= eps:
         action = np.random.randint(env.action_space.n)
@@ -107,11 +107,11 @@ def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
     for _ in range(num_ep):
         state = env.reset()
         done = False
-        action = _action_policy(state, epsilon, Q)
+        action = _epsilon_greedy_action_policy(state, epsilon, Q)
 
         while not done:
             next_state, reward, done, _ = env.step(action)
-            next_action = _action_policy(next_state, epsilon, Q)  # because on-policy
+            next_action = _epsilon_greedy_action_policy(next_state, epsilon, Q)  # because on-policy
 
             Q[state, action] += alpha * (reward + gamma * Q[next_state, next_action] - Q[state, action])
             
@@ -128,7 +128,7 @@ def qlearning(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
     for _ in range(num_ep):
         state = env.reset()
         done = False
-        action = _action_policy(state, epsilon, Q)
+        action = _epsilon_greedy_action_policy(state, epsilon, Q)
 
         while not done:
             next_state, reward, done, _ = env.step(action)
