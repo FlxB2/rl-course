@@ -1,0 +1,24 @@
+finished run 1 with reward: -43.0
+finished run 2 with reward: -43.0
+finished run 3 with reward: -13.0
+finished run 4 with reward: -3.0
+finished run 5 with reward: -32.0
+finished run 6 with reward: -45.0
+finished run 7 with reward: -1.0
+finished run 8 with reward: 0.0
+finished run 9 with reward: 4.0
+finished run 10 with reward: -33.0
+mean reward:  -20.9
+
+
+finished run 1 with reward: -38.0
+finished run 2 with reward: -10.0
+finished run 3 with reward: -11.0
+finished run 4 with reward: -16.0
+finished run 5 with reward: -74.0
+finished run 6 with reward: -4.0
+finished run 7 with reward: -8.0
+finished run 8 with reward: -13.0
+finished run 9 with reward: 6.0
+finished run 10 with reward: 7.0
+mean reward:  -16.1
