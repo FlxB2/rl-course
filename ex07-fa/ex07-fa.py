@@ -17,13 +17,13 @@ def get_discrete_state(state):
 
 
 # tune learning rate
-def qlearning(env, q_table, alpha=0.001, gamma=0.9, epsilon=0.1,
-              initial_learning_rate=1.0, min_learning_rate=0.005, num_ep=int(5000)):
+def qlearning(env, Q, alpha=0.001, gamma=0.9, epsilon=0.1, num_ep=int(5000)):
 
     episode_rewards = []
     episode_lengths = []
     episode_hits = []
     aggr_ep_rewards = {'ep': [], 'avg': [], 'max': [], 'min': []}
+    aggr_ep_goal = {'ep': [], 'goal': [], 'length': []}
 
     for episode in range(num_ep):
         episode_reward = 0
@@ -37,7 +37,7 @@ def qlearning(env, q_table, alpha=0.001, gamma=0.9, epsilon=0.1,
 
         while not done:
             if np.random.uniform(0, 1) > epsilon:
-                action = np.argmax(q_table[discrete_state])
+                action = np.argmax(Q[discrete_state])
             else:
                 action = env.action_space.sample()
 
@@ -48,9 +48,9 @@ def qlearning(env, q_table, alpha=0.001, gamma=0.9, epsilon=0.1,
             if (episode + 1) % 50 == 0:
                 env.render()
             '''
-            q_table[discrete_state + (action,)] += alpha * (reward + gamma *
-                                                                    np.max(q_table[new_discrete_state]) -
-                                                                    q_table[discrete_state + (action,)])
+            Q[discrete_state + (action,)] += alpha * (reward + gamma *
+                                                                    np.max(Q[new_discrete_state]) -
+                                                                    Q[discrete_state + (action,)])
 
             if new_state[0] >= env.goal_position:
                 reached_goal += 1
@@ -73,6 +73,17 @@ def qlearning(env, q_table, alpha=0.001, gamma=0.9, epsilon=0.1,
             aggr_ep_rewards['avg'].append(average_reward)
             aggr_ep_rewards['max'].append(max(episode_rewards[-EPISODE_LOG:]))
             aggr_ep_rewards['min'].append(min(episode_rewards[-EPISODE_LOG:]))
+            if episode == 0:
+                average_goal = episode_hits[0]
+            else:
+                average_goal = sum(episode_hits[-EPISODE_LOG:]) / EPISODE_LOG
+            if episode == 0:
+                average_length = episode_lengths[0]
+            else:
+                average_length = sum(episode_lengths[-EPISODE_LOG:]) / EPISODE_LOG
+            aggr_ep_goal['ep'].append(episode)
+            aggr_ep_goal['goal'].append(average_goal)
+            aggr_ep_goal['length'].append(average_length)
 
     env.close()
 
@@ -95,8 +106,8 @@ def main():
     reached_goals = []
     episode_lengths = []
     for i in range(10):
-        q_table = np.random.uniform(low=-2, high=0, size=(BUCKET_AMOUNT + [env.action_space.n]))
-        reached_goal, episode_length = qlearning(env, q_table)
+        Q = np.random.uniform(low=-2, high=0, size=(BUCKET_AMOUNT + [env.action_space.n]))
+        reached_goal, episode_length = qlearning(env, Q)
         reached_goals.append(reached_goal)
         episode_lengths.append(episode_length)
     env.close()
