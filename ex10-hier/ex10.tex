@@ -1,0 +1,80 @@
+\documentclass[a4paper]{article}
+%\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{geometry}
+\geometry{ left=2cm, right=2cm, top=2cm, bottom=3cm, bindingoffset=5mm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{amstext}
+\usepackage{array}
+\usepackage{amsmath}
+\newcolumntype{L}{>{$}l<{$}}
+\usepackage{tabularx, ragged2e}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{lastpage}
+\usepackage{todonotes}
+\usepackage{titlesec}
+\titleformat*{\section}{\large\bfseries}
+\usepackage{listings}
+\usepackage{color}
+
+\usepackage{tikz}
+%\newcommand{\tikzmark}[2]{\tikz[overlay, remember picture] \node[inner sep=0pt, outer sep=0pt, anchor=base] (#1) {#2};}
+\usetikzlibrary{tikzmark}
+
+
+\definecolor{mygreen}{rgb}{0.18, 0.545, 0.341}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{myblue}{rgb}{0.53,0.61,0.85}
+
+\lstset{
+ keywordstyle=\color{mygreen},
+ commentstyle=\color{mygray},
+ numbers=left,
+ numbersep=5pt, 
+ numberstyle=\scriptsize\color{mygray}
+ }
+
+\usepackage{amsmath,amssymb}
+
+\DeclareRobustCommand{\bbone}{\text{\usefont{U}{bbold}{m}{n}1}}
+
+\DeclareMathOperator{\EX}{\mathbb{E}}% expected value
+
+\date{}
+\author{}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{Felix Burk\\ Pascal Huszár}
+\fancyhead[L]{Reinforcment Learning \\ Summer Term 2021 }
+\fancyfoot[R]{page \thepage \text{ }/ \pageref*{LastPage}}
+%\fancyfoot[LE]{Seite \thepage \text{ }von \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.5pt}
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+\title{\textbf{Exercise 10}}
+
+\begin{document}
+	\maketitle 
+	\thispagestyle{fancy}
+	
+    \section*{Task 1 - DQN on the Cart-Pole}
+    \begin{itemize}
+    	\item[a)]    	
+    	The problem is that naive Q-learning with neural networks oscillates or even diverges. The data is not independent and identically distributed. The policy changes by a lot with only small changes to Q-values. \\
+    	Non independent and identically distributed data is adressed by DQN using Experience Replay. Transitions are stored and mini batches are sampled. \\
+    	To address rapid policy changes a second network for q values is used. \\
+    	Lastly, rewards are normalized to be in range $[-1,1]$, which ensures gradients are not too large.
+
+	\end{itemize}
+\end{document}
