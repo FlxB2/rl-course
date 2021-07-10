@@ -3,6 +3,22 @@ import numpy as np
 from itertools import product
 import matplotlib.pyplot as plt
 
+stat = {}
+
+
+def generate_export_policy(traj, env):
+    for t in traj:
+        for s, a in t:
+            if s not in stat:
+                stat[s] = [0] * env.action_space.n
+            stat[s][a] += 1
+    for s in stat:
+        stat[s] = np.array(stat[s]) / sum(stat[s])
+
+
+def expert(state, env):
+    return np.random.choice(range(env.action_space), p=stat[state])
+
 
 def generate_demonstrations(env, expertpolicy, epsilon=0.1, n_trajs=100):
     """ This is a helper function that generates trajectories using an expert policy """
@@ -28,13 +44,13 @@ def plot_rewards(rewards, env):
     """ This is a helper function to plot the reward function"""
     fig = plt.figure()
     dims = env.desc.shape
-    plt.imshow(np.reshape(rewards, dims), origin='upper', 
-               extent=[0,dims[0],0,dims[1]], 
+    plt.imshow(np.reshape(rewards, dims), origin='upper',
+               extent=[0, dims[0], 0, dims[1]],
                cmap=plt.cm.RdYlGn, interpolation='none')
     for x, y in product(range(dims[0]), range(dims[1])):
-        plt.text(y+0.5, dims[0]-x-0.5, '{:.3f}'.format(np.reshape(rewards, dims)[x,y]),
-                horizontalalignment='center', 
-                verticalalignment='center')
+        plt.text(y + 0.5, dims[0] - x - 0.5, '{:.3f}'.format(np.reshape(rewards, dims)[x, y]),
+                 horizontalalignment='center',
+                 verticalalignment='center')
     plt.xticks([])
     plt.yticks([])
     plt.show()
@@ -53,14 +69,14 @@ def value_iteration(env, rewards):
         delta = 0.
         for s in range(n_states):
             v = V_states[s]
-            v_actions = np.zeros(n_actions) # values for possible next actions
+            v_actions = np.zeros(n_actions)  # values for possible next actions
             for a in range(n_actions):  # compute values for possible next actions
                 v_actions[a] = rewards[s]
                 for tuple in env.P[s][a]:  # this implements the sum over s'
-                    v_actions[a] += tuple[0]*gamma*V_states[tuple[1]]  # discounted value of next state
+                    v_actions[a] += tuple[0] * gamma * V_states[tuple[1]]  # discounted value of next state
             policy[s] = np.argmax(v_actions)
             V_states[s] = np.max(v_actions)  # use the max
-            delta = max(delta, abs(v-V_states[s]))
+            delta = max(delta, abs(v - V_states[s]))
 
         if delta < theta:
             break
@@ -68,19 +84,16 @@ def value_iteration(env, rewards):
     return policy
 
 
-
-
 def main():
     env = gym.make('FrozenLake-v0')
-    #env.render()
+    # env.render()
     env.seed(0)
     np.random.seed(0)
     expertpolicy = [0, 3, 0, 3, 0, 0, 0, 0, 3, 1, 0, 0, 0, 2, 1, 0]
     trajs = generate_demonstrations(env, expertpolicy, 0.1, 20)  # list of trajectories
+    generate_export_policy(trajs, env) # a)
     print("one trajectory is a list with (state, action) pairs:")
-    print (trajs[0])
-
-
+    print(trajs[0])
 
 
 if __name__ == "__main__":
